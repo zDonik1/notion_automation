@@ -23,13 +23,16 @@ header = {
     "Notion-Version": "2022-06-28"
 }
 
-has_more = True
-cursor = None
-while has_more:
-    query_body = {}
-    if cursor is not None:
-        query_body['start_cursor'] = cursor
-
+START_DAY = 17
+for i in range(7):
+    query_body = {
+        "filter": {
+            "property": "Date", 
+            "date": {
+                "equals": f"2023-07-{START_DAY + i}"
+            }
+        }
+    }
     response = requests.post(f'https://api.notion.com/v1/databases/{WEEK_DB_ID}/query', headers=header, json=query_body)
     if response.status_code != 200:
         print(response.status_code)
@@ -37,7 +40,5 @@ while has_more:
         break
     
     response_dict = response.json()
-    has_more = response_dict['has_more']
-    cursor = response_dict['next_cursor']
     upload_pages(response_dict["results"])
     print(f"Uploaded {len(response_dict['results'])} pages")
