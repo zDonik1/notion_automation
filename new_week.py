@@ -1,11 +1,47 @@
 from dotenv import load_dotenv
 import os
 import requests
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 load_dotenv()
 
 DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
 WEEK_DB_ID = os.getenv('NOTION_WEEK_DB_ID')
+TIME_ZONE = "Asia/Tashkent"
+
+
+def get_first_weekday():
+    today = datetime.now(ZoneInfo(TIME_ZONE))
+    return today - timedelta(days=today.weekday())
+
+
+def adjust_to_current_week(date):
+    page_current_date = get_first_weekday() + timedelta(days=date.weekday())
+    return page_current_date.replace(hour=date.hour, minute=date.minute, second=0, microsecond=0)
+
+
+def get_date_in_page(page):
+    return page["properties"]["Date"]["date"]
+
+
+def get_adjusted_date_in_page(page, component):
+    date_str = get_date_in_page(page)[component]
+    if not date_str:
+        return None
+    return adjust_to_current_week(datetime.fromisoformat(date_str))
+
+
+def adjust_page_date(page, component):
+    date = get_adjusted_date_in_page(page, component)
+    if date is not None:
+        get_date_in_page(page)[component] = date.isoformat()
+
+
+def edit_date_on_pages(pages):
+    for page in pages:
+        adjust_page_date(page, "start")
+        adjust_page_date(page, "end")
 
 
 def upload_pages(pages):
@@ -55,6 +91,7 @@ for i in range(7):
         print(response.json())
         break
     
-    response_dict = response.json()
-    upload_pages(response_dict["results"])
-    print(f"Uploaded {len(response_dict['results'])} pages")
+    pages = response.json()["results"]
+    edit_date_on_pages(pages)
+    upload_pages(pages)
+    print(f"Uploaded {len(pages)} pages")
