@@ -27,11 +27,27 @@ START_DAY = 17
 for i in range(7):
     query_body = {
         "filter": {
-            "property": "Date", 
-            "date": {
-                "equals": f"2023-07-{START_DAY + i}"
+            "and": [
+                {
+                    "property": "Date", 
+                    "date": {
+                        "on_or_after": f"2023-07-{START_DAY + i}T00:00:00+05:00"
+                    }
+                },
+                {
+                    "property": "Date", 
+                    "date": {
+                        "before": f"2023-07-{START_DAY + i}T23:59:59+05:00"
+                    }
+                }
+            ]
+        },
+        "sorts": [
+            {
+                "property": "Date",
+                "direction": "ascending"
             }
-        }
+        ]
     }
     response = requests.post(f'https://api.notion.com/v1/databases/{WEEK_DB_ID}/query', headers=header, json=query_body)
     if response.status_code != 200:
