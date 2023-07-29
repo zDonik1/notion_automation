@@ -48,12 +48,12 @@ def upload_pages(pages):
     for page in pages:
         page["parent"]["database_id"] = DATABASE_ID
 
-        page_add_response = requests.post('https://api.notion.com/v1/pages', headers=header, json=page)
+        page_add_response = requests.post('https://api.notion.com/v1/pages', headers=HEADER, json=page)
         if page_add_response.status_code != 200:
             print(response.json())
 
 
-header = {
+HEADER = {
     "Authorization": f"Bearer {os.getenv('NOTION_KEY')}",
     "Content-Type": "application/json",
     "Notion-Version": "2022-06-28"
@@ -85,7 +85,7 @@ for i in range(7):
             }
         ]
     }
-    response = requests.post(f'https://api.notion.com/v1/databases/{WEEK_DB_ID}/query', headers=header, json=query_body)
+    response = requests.post(f'https://api.notion.com/v1/databases/{WEEK_DB_ID}/query', headers=HEADER, json=query_body)
     if response.status_code != 200:
         print(response.status_code)
         print(response.json())
