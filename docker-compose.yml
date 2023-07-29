@@ -1,0 +1,4 @@
+services:
+  scheduled:
+    build: scheduled
+    restart: always
