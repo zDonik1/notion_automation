@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  scheduled:
+    build:
+      context: scheduled/
+    restart: always
+    env_file: .env
