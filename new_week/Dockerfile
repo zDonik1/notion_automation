@@ -1,6 +1,6 @@
 FROM python:3.11-alpine
 
-WORKDIR /scheduled
+WORKDIR /new_week
 
 RUN apk update && apk upgrade --available && sync
 RUN pip install --upgrade pip

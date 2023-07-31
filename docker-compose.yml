@@ -1,8 +1,15 @@
 version: "3"
 
 services:
-  scheduled:
+  new_week:
     build:
-      context: scheduled/
+      context: new_week/
     restart: always
     env_file: .env
+  dashcontrol:
+    build:
+      context: dashcontrol/
+    restart: always
+    env_file: .env
+    ports:
+      - "8000:8000"
