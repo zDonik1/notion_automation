@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  scheduled:
+  new_week:
     build:
-      context: scheduled/
+      context: new_week/
     restart: always
     env_file: .env
