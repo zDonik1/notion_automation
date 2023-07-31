@@ -6,3 +6,8 @@ services:
       context: new_week/
     restart: always
     env_file: .env
+  dashcontrol:
+    build:
+      context: dashcontrol/
+    restart: always
+    env_file: .env
