@@ -81,7 +81,7 @@ for i in range(7):
         "sorts": [
             {
                 "property": "Date",
-                "direction": "ascending"
+                "direction": "descending"
             }
         ]
     }
