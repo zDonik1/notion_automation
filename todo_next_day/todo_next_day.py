@@ -71,14 +71,27 @@ query_body = {
     "filter": {
         "and": [
             {
-                "property": "Date",
-                "date": {"on_or_after": PREVIOUS_DAY.isoformat()},
+                "and": [
+                    {
+                        "property": "Date",
+                        "date": {"on_or_after": PREVIOUS_DAY.isoformat()},
+                    },
+                    {
+                        "property": "Date",
+                        "date": {"before": CURRENT_DAY.isoformat()},
+                    },
+                ]
             },
             {
-                "property": "Date",
-                "date": {"before": CURRENT_DAY.isoformat()},
+                "or": [
+                    {"property": "Recurrence", "select": {"equals": "Todo"}},
+                    {
+                        "property": "Recurrence",
+                        "select": {"equals": "Weekly"},
+                    },
+                ]
             },
-            {"property": "Recurrence", "select": {"equals": "Todo"}},
+            {"property": "Completion", "checkbox": {"equals": False}},
         ]
     },
     "sorts": [{"property": "Date", "direction": "ascending"}],
