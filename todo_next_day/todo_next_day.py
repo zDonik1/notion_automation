@@ -84,7 +84,7 @@ query_body = {
             },
             {
                 "or": [
-                    {"property": "Recurrence", "select": {"equals": "Todo"}},
+                    {"property": "Recurrence", "select": {"equals": "Once"}},
                     {
                         "property": "Recurrence",
                         "select": {"equals": "Weekly"},

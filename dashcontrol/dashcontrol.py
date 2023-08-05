@@ -31,7 +31,7 @@ def index():
             },
             "Recurrence": {
                 "type": "select",
-                "select": {"name": "Todo", "color": "green"},
+                "select": {"name": "Once", "color": "green"},
             }
         }
     }
