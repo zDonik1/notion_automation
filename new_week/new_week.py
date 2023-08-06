@@ -7,7 +7,6 @@ from zoneinfo import ZoneInfo
 load_dotenv()
 
 DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
-WEEK_DB_ID = os.getenv('NOTION_WEEK_DB_ID')
 TIME_ZONE = "Asia/Tashkent"
 
 
@@ -73,7 +72,7 @@ for i in range(7):
                 {
                     "property": "Date", 
                     "date": {
-                        "before": f"2023-07-{START_DAY + i}T23:59:59+05:00"
+                        "before": f"2023-07-{START_DAY + i + 1}T00:00:00+05:00"
                     }
                 }
             ]
@@ -85,7 +84,7 @@ for i in range(7):
             }
         ]
     }
-    response = requests.post(f'https://api.notion.com/v1/databases/{WEEK_DB_ID}/query', headers=HEADER, json=query_body)
+    response = requests.post(f'https://api.notion.com/v1/databases/{DATABASE_ID}/query', headers=HEADER, json=query_body)
     if response.status_code != 200:
         print(response.status_code)
         print(response.json())
