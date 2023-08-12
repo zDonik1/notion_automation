@@ -91,7 +91,7 @@ query_body = {
                     },
                 ]
             },
-            {"property": "Completion", "checkbox": {"equals": False}},
+            {"property": "Archived Status", "checkbox": {"equals": False}},
         ]
     },
     "sorts": [{"property": "Date", "direction": "ascending"}],
