@@ -3,6 +3,7 @@ import os
 import requests
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from pprint import pprint
 
 load_dotenv()
 
@@ -48,11 +49,16 @@ def edit_date_on_pages(pages):
 def upload_pages(pages):
     for page in pages:
         page["properties"].pop("Time")
+        page["properties"].pop("Area")
+        page["properties"].pop("Archived (Project)")
+        page["properties"].pop("Archived Status")
+        page["properties"].pop("Created time")
         page_add_response = requests.post(
             "https://api.notion.com/v1/pages", headers=HEADER, json=page
         )
         if page_add_response.status_code != 200:
-            print(response.json())
+            pprint(response.json())
+            quit()
 
 
 HEADER = {
