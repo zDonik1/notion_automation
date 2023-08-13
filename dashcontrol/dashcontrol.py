@@ -29,9 +29,9 @@ def index():
                 "type": "date",
                 "date": {"start": datetime.now().strftime("%Y-%m-%d")},
             },
-            "Recurrence": {
-                "type": "select",
-                "select": {"name": "Once", "color": "green"},
+            "Transfer to Next Day": {
+                "type": "checkbox",
+                "checkbox": {},
             }
         }
     }

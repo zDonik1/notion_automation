@@ -83,13 +83,8 @@ query_body = {
                 ]
             },
             {
-                "or": [
-                    {"property": "Recurrence", "select": {"equals": "Once"}},
-                    {
-                        "property": "Recurrence",
-                        "select": {"equals": "Weekly"},
-                    },
-                ]
+                "property": "Transfer to Next Day",
+                "checkbox": {"equals": True},
             },
             {"property": "Archived Status", "checkbox": {"equals": False}},
         ]
