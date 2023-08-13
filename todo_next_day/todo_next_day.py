@@ -84,14 +84,14 @@ query_body = {
             },
             {
                 "or": [
-                    {"property": "Recurrence", "select": {"equals": "Todo"}},
+                    {"property": "Recurrence", "select": {"equals": "Once"}},
                     {
                         "property": "Recurrence",
                         "select": {"equals": "Weekly"},
                     },
                 ]
             },
-            {"property": "Completion", "checkbox": {"equals": False}},
+            {"property": "Archived Status", "checkbox": {"equals": False}},
         ]
     },
     "sorts": [{"property": "Date", "direction": "ascending"}],

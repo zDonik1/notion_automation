@@ -3,22 +3,24 @@ import os
 import requests
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from pprint import pprint
 
 load_dotenv()
 
-DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
-WEEK_DB_ID = os.getenv('NOTION_WEEK_DB_ID')
+DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
 TIME_ZONE = "Asia/Tashkent"
 
 
 def get_first_weekday():
     today = datetime.now(ZoneInfo(TIME_ZONE))
-    return today - timedelta(days=today.weekday())
+    return today - timedelta(days=today.weekday()) + timedelta(weeks=1)
 
 
 def adjust_to_current_week(date):
     page_current_date = get_first_weekday() + timedelta(days=date.weekday())
-    return page_current_date.replace(hour=date.hour, minute=date.minute, second=0, microsecond=0)
+    return page_current_date.replace(
+        hour=date.hour, minute=date.minute, second=0, microsecond=0
+    )
 
 
 def get_date_in_page(page):
@@ -46,17 +48,23 @@ def edit_date_on_pages(pages):
 
 def upload_pages(pages):
     for page in pages:
-        page["parent"]["database_id"] = DATABASE_ID
-
-        page_add_response = requests.post('https://api.notion.com/v1/pages', headers=HEADER, json=page)
+        page["properties"].pop("Time")
+        page["properties"].pop("Area")
+        page["properties"].pop("Archived (Project)")
+        page["properties"].pop("Archived Status")
+        page["properties"].pop("Created time")
+        page_add_response = requests.post(
+            "https://api.notion.com/v1/pages", headers=HEADER, json=page
+        )
         if page_add_response.status_code != 200:
-            print(response.json())
+            pprint(response.json())
+            quit()
 
 
 HEADER = {
     "Authorization": f"Bearer {os.getenv('NOTION_KEY')}",
     "Content-Type": "application/json",
-    "Notion-Version": "2022-06-28"
+    "Notion-Version": "2022-06-28",
 }
 
 START_DAY = 17
@@ -65,32 +73,27 @@ for i in range(7):
         "filter": {
             "and": [
                 {
-                    "property": "Date", 
-                    "date": {
-                        "on_or_after": f"2023-07-{START_DAY + i}T00:00:00+05:00"
-                    }
+                    "property": "Date",
+                    "date": {"on_or_after": f"2023-07-{START_DAY + i}T00:00:00+05:00"},
                 },
                 {
-                    "property": "Date", 
-                    "date": {
-                        "before": f"2023-07-{START_DAY + i}T23:59:59+05:00"
-                    }
-                }
+                    "property": "Date",
+                    "date": {"before": f"2023-07-{START_DAY + i + 1}T00:00:00+05:00"},
+                },
             ]
         },
-        "sorts": [
-            {
-                "property": "Date",
-                "direction": "descending"
-            }
-        ]
+        "sorts": [{"property": "Date", "direction": "descending"}],
     }
-    response = requests.post(f'https://api.notion.com/v1/databases/{WEEK_DB_ID}/query', headers=HEADER, json=query_body)
+    response = requests.post(
+        f"https://api.notion.com/v1/databases/{DATABASE_ID}/query",
+        headers=HEADER,
+        json=query_body,
+    )
     if response.status_code != 200:
         print(response.status_code)
         print(response.json())
         break
-    
+
     pages = response.json()["results"]
     edit_date_on_pages(pages)
     upload_pages(pages)
