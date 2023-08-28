@@ -48,11 +48,12 @@ def edit_date_on_pages(pages):
 
 def upload_pages(pages):
     for page in pages:
-        page["properties"].pop("Time")
-        page["properties"].pop("Area")
+        page["properties"].pop("Area (Project)")
         page["properties"].pop("Archived (Project)")
         page["properties"].pop("Archived Status")
         page["properties"].pop("Created time")
+        page["properties"].pop("Project")
+        page["properties"].pop("Time")
         page_add_response = requests.post(
             "https://api.notion.com/v1/pages", headers=HEADER, json=page
         )
