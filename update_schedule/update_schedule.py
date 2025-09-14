@@ -3,17 +3,17 @@ import os
 import requests
 from datetime import datetime, timedelta
 
-NAME_FILTER = "retrospect day"
+NAME_FILTER = "arabic"
 TIMES = [
-    "21:00",
-    "21:00",
-    "21:00",
-    "21:00",
-    "21:00",
-    "21:00",
-    "21:00",
+    "22:00",
+    "22:00",
+    "22:00",
+    "22:00",
+    "22:00",
+    "22:00",
+    "22:00",
 ]
-DELTA = 0
+DELTA = 20
 
 load_dotenv()
 
